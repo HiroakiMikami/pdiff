@@ -11,7 +11,8 @@
     "url": "git+https://github.com/HiroakiMikami/pdiff.git"
   },
   "keywords": [
-    "diff", "cli"
+    "diff",
+    "cli"
   ],
   "author": "Hiroaki Mikami",
   "license": "MIT",
@@ -20,8 +21,8 @@
   },
   "homepage": "https://github.com/HiroakiMikami/pdiff#readme",
   "dependencies": {
-    "diff": "*",
     "commander": "*",
+    "diff": "^2.2.2",
     "readline": "*"
   },
   "devDependencies": {
