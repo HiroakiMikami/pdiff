@@ -3,6 +3,9 @@
   "version": "2.0.1",
   "description": "A better diffing tool",
   "main": "lib/main.js",
+  "bin": {
+    "pdiff": "bin/pdiff"
+  },
   "scripts": {
     "test": "mocha -R spec"
   },
