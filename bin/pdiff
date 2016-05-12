@@ -1,10 +1,10 @@
 #! /usr/bin/env node
 
 // Require modules
-var commander = require("commander");
-var fs = require("fs");
-var readline = require("readline");
-var pdiff = require('../lib/main.js');
+const commander = require("commander");
+const fs = require("fs");
+const readline = require("readline");
+const pdiff = require('../lib/main.js');
 
 var file1 = null;
 var file2 = null;
@@ -16,7 +16,7 @@ commander
   .option('-c --color', 'Color mode')
   .option('-h --html', 'HTML mode')
   .arguments("<file1> <file2>")
-  .action(function(file1_, file2_) {
+  .action((file1_, file2_) => {
     file1 = file1_;
     file2 = file2_;
   })
@@ -32,7 +32,7 @@ function readFile(path) {
     if (path == '-') {
       // Read from stdin
       var lines = [];
-      var reader = readline.createInterface({
+      const reader = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
         terminal: false
@@ -56,22 +56,21 @@ function readFile(path) {
 // Read two files
 Promise.all([readFile(file1), readFile(file2)]).then(
   (results) => {
-    var content1 = results[0];
-    var content2 = results[1];
+    const content1 = results[0];
+    const content2 = results[1];
 
     // Calculate diff
-    var line = (commander.line == undefined) ? -1 : commander.line;
-    var diff_ = pdiff.addLineNumbers(pdiff.diff(content1, content2));
-    var diff = pdiff.extractDiff(diff_, line);
+    const line = (commander.line == undefined) ? -1 : commander.line;
+    const diff_ = pdiff.addLineNumbers(pdiff.diff(content1, content2));
+    const diff = pdiff.extractDiff(diff_, line);
 
     // Output diff
-    var maxLine = diff_.length;
-    var digit = String(maxLine).length;
+    const maxLine = diff_.length;
+    const digit = String(maxLine).length;
 
     if (commander.html) {
-      for (var i = 0; i < diff.length; i++) {
-        var group = diff[i];
-        for (delta of group) {
+      for (var group of diff) {
+        for (var delta of group) {
           var text = "<div class='line'>";
           // Add line numbers
           if (delta.lineNumberOfLhs != undefined) {
@@ -87,7 +86,7 @@ Promise.all([readFile(file1), readFile(file2)]).then(
 
           // Add the value of this line
           text += "<span class='value'>";
-          for (value of delta.values) {
+          for (var value of delta.values) {
             if (value.added) {
               text += "<span class='added'>" + value.value + "</span>";
             } else if (value.removed) {
@@ -112,9 +111,8 @@ Promise.all([readFile(file1), readFile(file2)]).then(
       for (var i = 0; i < digit - 1; i++) spaces += " ";
 
       if (commander.color) {
-        for (var i = 0; i < diff.length; i++) {
-          var group = diff[i];
-          for (delta of group) {
+        for (var group of diff) {
+          for (var delta of group) {
             var text = "";
             // Add line numbers
             if (delta.lineNumberOfLhs != undefined) {
@@ -131,7 +129,7 @@ Promise.all([readFile(file1), readFile(file2)]).then(
             text += " ";
 
             // Add the value of this line
-            for (value of delta.values) {
+            for (var value of delta.values) {
               if (value.added) {
                 text += "\033[1;32m" + value.value + "\033[0m"
               } else if (value.removed) {
@@ -150,9 +148,8 @@ Promise.all([readFile(file1), readFile(file2)]).then(
           }
         }
       } else {
-        for (var i = 0; i < diff.length; i++) {
-          var group = diff[i];
-          for (delta of group) {
+        for (var group of diff) {
+          for (var delta of group) {
             var text = "";
             // Add line numbers
             if (delta.lineNumberOfLhs != undefined) {
@@ -169,7 +166,7 @@ Promise.all([readFile(file1), readFile(file2)]).then(
             text += " ";
 
             // Add the value of this line
-            for (value of delta.values) {
+            for (var value of delta.values) {
               if (value.added) {
                 text += "{+" + value.value + "+}"
               } else if (value.removed) {
