@@ -25,8 +25,7 @@ func x() {
             {
               nodes: ["  int x = 10;\n"]
             },
-            "}\n",
-            "\n"
+            "}\n"
           ]
         }
       ]);
@@ -51,8 +50,7 @@ double r = 2.0;
         },
         {
           nodes: [
-            "double r = 2.0;\n",
-            "\n"
+            "double r = 2.0;\n"
           ]
         }
       ]);
