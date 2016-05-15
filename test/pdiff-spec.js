@@ -5,92 +5,6 @@ var chai = require("chai");
 chai.should();
 
 describe("pdiff", () => {
-  describe('#diff', () => {
-    it("should diff on word boundaries.", () => {
-      var result = pdiff.diff("var x = 10;", "var x = 20;");
-
-      result.should.deep.equal([
-        {
-          value: "var x = "
-        },
-        {
-          added: undefined,
-          removed: true,
-          value: "10"
-        },
-        {
-          added: true,
-          removed: undefined,
-          value: "20"
-        },
-        {
-          value: ";"
-        }
-      ])
-    })
-    it("should diff lines when a delta is large.", () => {
-      var result = pdiff.diff(
-        [
-          "function fib(n)",
-          "  if (n <= 1) return 1;",
-          "  else return fib(n-1) + fib(n-2);",
-          "}",
-          "",
-          "function initialize() {",
-          "  alert('foo');",
-          "}"
-        ].join("\n"),
-        [
-          "function initialize() {",
-          "  alert('foo');",
-          "}"
-        ].join("\n")
-      );
-
-      result.should.deep.equal([
-        {
-          added: undefined,
-          removed: true,
-          value: [
-            "function fib(n)",
-            "  if (n <= 1) return 1;",
-            "  else return fib(n-1) + fib(n-2);",
-            "}",
-            "",
-            ""
-          ].join("\n")
-        },
-        {
-          value: [
-            "function initialize() {",
-            "  alert('foo');",
-            "}"
-          ].join("\n")
-        }
-      ])
-    })
-    it("should extract an insertion and deletion.", () => {
-      var result = pdiff.diff(
-        "{\n  foo: 0\n}\n", "{\n  foo: 0,\n  bar: 1\n}\n"
-      )
-      result.should.deep.equal([
-        {value: "{\n"},
-        {value: "  foo: 0"},
-        {
-          removed: undefined,
-          added: true,
-          value: ","
-        },
-        {value: "\n"},
-        {
-          removed: undefined,
-          added: true,
-          value: "  bar: 1\n"
-        },
-        {value: "}\n"}
-      ])
-    })
-  })
   describe("#addLineNumbers", () => {
     it("should return a diff data with line numbers when words are replaced.", () => {
       var diff = pdiff.addLineNumbers(pdiff.diff(
@@ -260,30 +174,52 @@ describe("pdiff", () => {
   describe("#extractDiff", () => {
     it("should return a grouped diff.", () => {
       var diff = pdiff.addLineNumbers(pdiff.diff(
-        "foo\nbar\n",
-        "test\nbar\ntest: 10\n"
+        "foo\n\nbar\n\n",
+        "test\n\nbar\n\ntest: 10\n"
       ));
       var extractedDiff = pdiff.extractDiff(diff, 0);
       extractedDiff.should.deep.equal([
         [
           {
             lineNumberOfLhs: 0,
-            lineNumberOfRhs: 0,
             values: [
               {
                 removed: true,
                 value: "foo"
-              },
+              }
+            ]
+          },
+          {
+            lineNumberOfLhs: 1,
+            values: [
+              {
+                removed: true,
+                value: ''
+              }
+            ]
+          },
+          {
+            lineNumberOfRhs: 0,
+            values: [
               {
                 added: true,
                 value: "test"
+              }
+            ]
+          },
+          {
+            lineNumberOfRhs: 1,
+            values: [
+              {
+                added: true,
+                value: ''
               }
             ]
           }
         ],
         [
           {
-            lineNumberOfRhs: 2,
+            lineNumberOfRhs: 4,
             values: [{
               added: true,
               value: "test: 10"

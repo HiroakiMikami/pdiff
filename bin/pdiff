@@ -4,6 +4,7 @@
 const commander = require("commander");
 const fs = require("fs");
 const readline = require("readline");
+const Promise = require('bluebird');
 const pdiff = require('../lib/main.js');
 
 var file1 = null;
@@ -186,9 +187,5 @@ Promise.all([readFile(file1), readFile(file2)]).then(
         }
       }
     }
-  },
-  (err) => {
-    // Handle error
-    console.error(err);
   }
 )
