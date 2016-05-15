@@ -1,3 +1,5 @@
+'use strict';
+
 const CodeAnalyzer = require('../lib/code-analyzer');
 
 const assert = require('assert');
