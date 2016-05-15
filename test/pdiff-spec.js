@@ -174,30 +174,52 @@ describe("pdiff", () => {
   describe("#extractDiff", () => {
     it("should return a grouped diff.", () => {
       var diff = pdiff.addLineNumbers(pdiff.diff(
-        "foo\nbar\n",
-        "test\nbar\ntest: 10\n"
+        "foo\n\nbar\n\n",
+        "test\n\nbar\n\ntest: 10\n"
       ));
       var extractedDiff = pdiff.extractDiff(diff, 0);
       extractedDiff.should.deep.equal([
         [
           {
             lineNumberOfLhs: 0,
-            lineNumberOfRhs: 0,
             values: [
               {
                 removed: true,
                 value: "foo"
-              },
+              }
+            ]
+          },
+          {
+            lineNumberOfLhs: 1,
+            values: [
+              {
+                removed: true,
+                value: ''
+              }
+            ]
+          },
+          {
+            lineNumberOfRhs: 0,
+            values: [
               {
                 added: true,
                 value: "test"
+              }
+            ]
+          },
+          {
+            lineNumberOfRhs: 1,
+            values: [
+              {
+                added: true,
+                value: ''
               }
             ]
           }
         ],
         [
           {
-            lineNumberOfRhs: 2,
+            lineNumberOfRhs: 4,
             values: [{
               added: true,
               value: "test: 10"
